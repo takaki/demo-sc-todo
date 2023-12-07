@@ -9,8 +9,9 @@ type Mutation {
 }
 
 type Query {
+  allTodos: [Todo]!
   completedTodos: [Todo]!
-  todos: [Todo]!
+  incompleteTodos: [Todo]!
 }
 
 type Todo {

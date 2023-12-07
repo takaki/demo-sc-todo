@@ -54,8 +54,9 @@ export interface NexusGenFieldTypes {
     deleteTodo: NexusGenRootTypes['Todo'] | null; // Todo
   }
   Query: { // field return type
+    allTodos: Array<NexusGenRootTypes['Todo'] | null>; // [Todo]!
     completedTodos: Array<NexusGenRootTypes['Todo'] | null>; // [Todo]!
-    todos: Array<NexusGenRootTypes['Todo'] | null>; // [Todo]!
+    incompleteTodos: Array<NexusGenRootTypes['Todo'] | null>; // [Todo]!
   }
   Todo: { // field return type
     completed: boolean | null; // Boolean
@@ -71,8 +72,9 @@ export interface NexusGenFieldTypeNames {
     deleteTodo: 'Todo'
   }
   Query: { // field return type name
+    allTodos: 'Todo'
     completedTodos: 'Todo'
-    todos: 'Todo'
+    incompleteTodos: 'Todo'
   }
   Todo: { // field return type name
     completed: 'Boolean'

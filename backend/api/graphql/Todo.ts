@@ -12,7 +12,13 @@ export const Todo = objectType({
 export const TodoQuery = extendType({
   type: "Query",
   definition(t) {
-    t.nonNull.list.field("todos", {
+    t.nonNull.list.field("allTodos", {
+      type: "Todo",
+      resolve(_root, _args, ctx) {
+        return ctx.db.todo.findMany({});
+      },
+    });
+    t.nonNull.list.field("incompleteTodos", {
       type: "Todo",
       resolve(_root, _args, ctx) {
         return ctx.db.todo.findMany({ where: { completed: false } });

@@ -40,8 +40,9 @@ export type MutationDeleteTodoArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  allTodos: Array<Maybe<Todo>>;
   completedTodos: Array<Maybe<Todo>>;
-  todos: Array<Maybe<Todo>>;
+  incompleteTodos: Array<Maybe<Todo>>;
 };
 
 export type Todo = {
@@ -54,7 +55,7 @@ export type Todo = {
 export type TodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', id?: number | null, name?: string | null, completed?: boolean | null } | null> };
+export type TodosQuery = { __typename?: 'Query', allTodos: Array<{ __typename?: 'Todo', id?: number | null, name?: string | null, completed?: boolean | null } | null> };
 
 
-export const TodosDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Todos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"todos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"completed"}}]}}]}}]} as unknown as DocumentNode<TodosQuery, TodosQueryVariables>;
+export const TodosDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Todos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allTodos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"completed"}}]}}]}}]} as unknown as DocumentNode<TodosQuery, TodosQueryVariables>;

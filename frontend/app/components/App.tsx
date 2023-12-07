@@ -5,7 +5,7 @@ import { graphql } from "@/src/gql";
 
 const GET_LOCATIONS = graphql(`
   query Todos {
-    todos {
+    allTodos {
       id
       name
       completed
@@ -40,7 +40,7 @@ function DisplayLocations() {
         </tr>
       </thead>
       <tbody>
-        {data.todos.map((e) => (
+        {data.allTodos.map((e) => (
           <tr key={e?.id}>
             <td>{e?.id}</td>
             <td>{e?.name}</td>
