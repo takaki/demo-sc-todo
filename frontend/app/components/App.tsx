@@ -1,11 +1,33 @@
 "use client";
-import { ApolloProvider, useQuery } from "@apollo/client";
+import { ApolloProvider, useMutation, useQuery } from "@apollo/client";
 import { client } from "@/src";
 import { graphql } from "@/src/gql";
+import { useState } from "react";
 
-const GET_LOCATIONS = graphql(`
+// noinspection JSUnusedLocalSymbols
+const GET_ALL_TODOS = graphql(`
   query Todos {
     allTodos {
+      id
+      name
+      completed
+    }
+  }
+`);
+
+const GET_INCOMPLETE_TODOS = graphql(`
+  query InCompleteTodos {
+    incompleteTodos {
+      id
+      name
+      completed
+    }
+  }
+`);
+
+const ADD_TODO = graphql(`
+  mutation createTodo($name: String!) {
+    createTodo(name: $name) {
       id
       name
       completed
@@ -19,13 +41,41 @@ function App() {
       <div>
         <h2>My first Apollo Todo app 🚀</h2>
         <DisplayLocations />
+        <AddForm />
       </div>
     </ApolloProvider>
   );
 }
 
+function AddForm() {
+  const [name, setName] = useState("");
+  // noinspection JSUnusedLocalSymbols
+  const [addTodo, { data, loading, error }] = useMutation(ADD_TODO, {
+    refetchQueries: ["InCompleteTodos"],
+  });
+
+  if (loading) return "Submitting...";
+  if (error) return `Submission error! ${error.message}`;
+
+  return (
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+        await addTodo({ variables: { name: name } });
+        setName("");
+      }}
+    >
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <button type="submit">Add Todo</button>
+    </form>
+  );
+}
 function DisplayLocations() {
-  const { loading, error, data } = useQuery(GET_LOCATIONS);
+  const { loading, error, data } = useQuery(GET_INCOMPLETE_TODOS);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
@@ -40,7 +90,7 @@ function DisplayLocations() {
         </tr>
       </thead>
       <tbody>
-        {data.allTodos.map((e) => (
+        {data.incompleteTodos.map((e) => (
           <tr key={e?.id}>
             <td>{e?.id}</td>
             <td>{e?.name}</td>
