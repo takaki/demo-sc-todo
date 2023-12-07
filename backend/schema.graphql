@@ -2,7 +2,13 @@
 ### Do not make changes to this file directly
 
 
+type Mutation {
+  complete(todoId: Int!): Todo
+  createTodo(name: String!): Todo!
+}
+
 type Query {
+  completedTodos: [Todo]!
   todos: [Todo]!
 }
 

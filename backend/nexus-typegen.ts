@@ -4,7 +4,7 @@
  */
 
 
-
+import type { Context } from "./api/context"
 
 
 
@@ -28,6 +28,7 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Mutation: {};
   Query: {};
   Todo: { // root type
     completed?: boolean | null; // Boolean
@@ -47,7 +48,12 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Mutation: { // field return type
+    complete: NexusGenRootTypes['Todo'] | null; // Todo
+    createTodo: NexusGenRootTypes['Todo']; // Todo!
+  }
   Query: { // field return type
+    completedTodos: Array<NexusGenRootTypes['Todo'] | null>; // [Todo]!
     todos: Array<NexusGenRootTypes['Todo'] | null>; // [Todo]!
   }
   Todo: { // field return type
@@ -58,7 +64,12 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Mutation: { // field return type name
+    complete: 'Todo'
+    createTodo: 'Todo'
+  }
   Query: { // field return type name
+    completedTodos: 'Todo'
     todos: 'Todo'
   }
   Todo: { // field return type name
@@ -69,6 +80,14 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    complete: { // args
+      todoId: number; // Int!
+    }
+    createTodo: { // args
+      name: string; // String!
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {
@@ -102,7 +121,7 @@ export type NexusGenFeaturesConfig = {
 }
 
 export interface NexusGenTypes {
-  context: any;
+  context: Context;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;

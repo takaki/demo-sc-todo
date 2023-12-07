@@ -1,4 +1,4 @@
-import { extendType, objectType } from "nexus";
+import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
 
 export const Todo = objectType({
   name: "Todo",
@@ -14,8 +14,45 @@ export const TodoQuery = extendType({
   definition(t) {
     t.nonNull.list.field("todos", {
       type: "Todo",
-      resolve() {
-        return [{ id: 1, name: "hoge", completed: false }];
+      resolve(_root, _args, ctx) {
+        return ctx.db.todo.findMany({ where: { completed: false } });
+      },
+    });
+    t.nonNull.list.field("completedTodos", {
+      type: "Todo",
+      resolve(_root, _args, ctx) {
+        return ctx.db.todo.findMany({ where: { completed: true } });
+      },
+    });
+  },
+});
+
+export const TodoMutation = extendType({
+  type: "Mutation",
+  definition(t) {
+    t.nonNull.field("createTodo", {
+      type: "Todo",
+      args: {
+        name: nonNull(stringArg()),
+      },
+      resolve(_root, args, ctx) {
+        const todo = {
+          name: args.name,
+          completed: false,
+        };
+        return ctx.db.todo.create({ data: todo });
+      },
+    });
+    t.field("complete", {
+      type: "Todo",
+      args: {
+        todoId: nonNull(intArg()),
+      },
+      resolve(_root, args, ctx) {
+        return ctx.db.todo.update({
+          where: { id: args.todoId },
+          data: { completed: true },
+        });
       },
     });
   },
