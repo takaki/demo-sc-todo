@@ -35,6 +35,16 @@ const ADD_TODO = graphql(`
   }
 `);
 
+const COMPLETE_TODO = graphql(`
+  mutation ComplateTodo($todoId: Int!) {
+    completeTodo(todoId: $todoId) {
+      id
+      name
+      completed
+    }
+  }
+`);
+
 function App() {
   return (
     <ApolloProvider client={client}>
@@ -74,6 +84,27 @@ function AddForm() {
     </form>
   );
 }
+
+function Complete(v: { todoId: number }) {
+  // noinspection JSUnusedLocalSymbols
+  const [completeTodo, { data, loading, error }] = useMutation(COMPLETE_TODO, {
+    refetchQueries: ["InCompleteTodos"],
+  });
+
+  if (loading) return "Submitting...";
+  if (error) return `Submission error! ${error.message}`;
+
+  return (
+    <button
+      onClick={async () => {
+        await completeTodo({ variables: { todoId: v.todoId } });
+      }}
+    >
+      完了!!
+    </button>
+  );
+}
+
 function DisplayLocations() {
   const { loading, error, data } = useQuery(GET_INCOMPLETE_TODOS);
 
@@ -85,18 +116,28 @@ function DisplayLocations() {
       <thead>
         <tr>
           <th>Id</th>
-          <th>Name</th>
-          <th>Completed</th>
+          <th>課題名</th>
+          <th>完了ボタン</th>
         </tr>
       </thead>
       <tbody>
-        {data.incompleteTodos.map((e) => (
-          <tr key={e?.id}>
-            <td>{e?.id}</td>
-            <td>{e?.name}</td>
-            <td>{e?.completed ? "completed" : "not completed"}</td>
-          </tr>
-        ))}
+        {data.incompleteTodos.map((e) =>
+          e?.id ? (
+            <tr key={e?.id}>
+              <td>{e?.id}</td>
+              <td>{e?.name}</td>
+              <td>
+                {e?.completed ? "completed" : <Complete todoId={e?.id} />}
+              </td>
+            </tr>
+          ) : (
+            <tr key={e?.id}>
+              <td>No data</td>
+              <td />
+              <td />
+            </tr>
+          )
+        )}
       </tbody>
     </table>
   );
