@@ -1,2 +1,5 @@
 /.idea
 node_modules
+dev.db*
+# Keep environment variables out of version control
+.env
