@@ -6,6 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Todo {
+  id        Int     @id @default(autoincrement())
+  name      String
+  completed Boolean
 }
