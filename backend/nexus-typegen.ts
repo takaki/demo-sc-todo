@@ -48,7 +48,7 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Query: { // field return type
-    ok: boolean; // Boolean!
+    todos: Array<NexusGenRootTypes['Todo'] | null>; // [Todo]!
   }
   Todo: { // field return type
     completed: boolean | null; // Boolean
@@ -59,7 +59,7 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   Query: { // field return type name
-    ok: 'Boolean'
+    todos: 'Todo'
   }
   Todo: { // field return type name
     completed: 'Boolean'
