@@ -13,10 +13,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  query Todos {\n    allTodos {\n      id\n      name\n      completed\n    }\n  }\n": types.TodosDocument,
+    "\n  query Todos {\n    completedTodos {\n      id\n      name\n      completed\n    }\n  }\n": types.TodosDocument,
     "\n  query InCompleteTodos {\n    incompleteTodos {\n      id\n      name\n      completed\n    }\n  }\n": types.InCompleteTodosDocument,
     "\n  mutation createTodo($name: String!) {\n    createTodo(name: $name) {\n      id\n      name\n      completed\n    }\n  }\n": types.CreateTodoDocument,
-    "\n  mutation ComplateTodo($todoId: Int!) {\n    completeTodo(todoId: $todoId) {\n      id\n      name\n      completed\n    }\n  }\n": types.ComplateTodoDocument,
+    "\n  mutation CompleteTodo($todoId: Int!) {\n    completeTodo(todoId: $todoId) {\n      id\n      name\n      completed\n    }\n  }\n": types.CompleteTodoDocument,
 };
 
 /**
@@ -36,7 +36,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Todos {\n    allTodos {\n      id\n      name\n      completed\n    }\n  }\n"): (typeof documents)["\n  query Todos {\n    allTodos {\n      id\n      name\n      completed\n    }\n  }\n"];
+export function graphql(source: "\n  query Todos {\n    completedTodos {\n      id\n      name\n      completed\n    }\n  }\n"): (typeof documents)["\n  query Todos {\n    completedTodos {\n      id\n      name\n      completed\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -48,7 +48,7 @@ export function graphql(source: "\n  mutation createTodo($name: String!) {\n    
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation ComplateTodo($todoId: Int!) {\n    completeTodo(todoId: $todoId) {\n      id\n      name\n      completed\n    }\n  }\n"): (typeof documents)["\n  mutation ComplateTodo($todoId: Int!) {\n    completeTodo(todoId: $todoId) {\n      id\n      name\n      completed\n    }\n  }\n"];
+export function graphql(source: "\n  mutation CompleteTodo($todoId: Int!) {\n    completeTodo(todoId: $todoId) {\n      id\n      name\n      completed\n    }\n  }\n"): (typeof documents)["\n  mutation CompleteTodo($todoId: Int!) {\n    completeTodo(todoId: $todoId) {\n      id\n      name\n      completed\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

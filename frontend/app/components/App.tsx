@@ -4,10 +4,9 @@ import { client } from "@/src";
 import { graphql } from "@/src/gql";
 import { useState } from "react";
 
-// noinspection JSUnusedLocalSymbols
-const GET_ALL_TODOS = graphql(`
+const GET_COMPLETED_TODOS = graphql(`
   query Todos {
-    allTodos {
+    completedTodos {
       id
       name
       completed
@@ -36,7 +35,7 @@ const ADD_TODO = graphql(`
 `);
 
 const COMPLETE_TODO = graphql(`
-  mutation ComplateTodo($todoId: Int!) {
+  mutation CompleteTodo($todoId: Int!) {
     completeTodo(todoId: $todoId) {
       id
       name
@@ -46,12 +45,28 @@ const COMPLETE_TODO = graphql(`
 `);
 
 function App() {
+  const [completed, setCompleted] = useState(false);
   return (
     <ApolloProvider client={client}>
       <div>
         <h2>My first Apollo Todo app 🚀</h2>
-        <DisplayLocations />
-        <AddForm />
+        <input
+          type={"radio"}
+          name={"completed"}
+          value={"false"}
+          checked={!completed}
+          onClick={() => setCompleted(false)}
+        />
+        <label>未完了</label>
+        <input
+          type={"radio"}
+          name={"completed"}
+          value={"true"}
+          checked={completed}
+          onClick={() => setCompleted(true)}
+        />
+        <label>完了</label>
+        {completed ? <DisplayCompleteTodos /> : <DisplayIncompleteTodos />}
       </div>
     </ApolloProvider>
   );
@@ -75,6 +90,7 @@ function AddForm() {
         setName("");
       }}
     >
+      課題を追加
       <input
         type="text"
         value={name}
@@ -105,41 +121,74 @@ function Complete(v: { todoId: number }) {
   );
 }
 
-function DisplayLocations() {
+function DisplayIncompleteTodos() {
   const { loading, error, data } = useQuery(GET_INCOMPLETE_TODOS);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
   if (!data) return <p>No data</p>;
   return (
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>課題名</th>
+            <th>完了ボタン</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.incompleteTodos.map((e) =>
+            e?.id ? (
+              <tr key={e?.id}>
+                <td>{e?.id}</td>
+                <td>{e?.name}</td>
+                <td>
+                  {e?.completed ? "completed" : <Complete todoId={e?.id} />}
+                </td>
+              </tr>
+            ) : (
+              <tr key={e?.id}>
+                <td>No data</td>
+                <td />
+                <td />
+              </tr>
+            )
+          )}
+        </tbody>
+      </table>
+      <AddForm />
+    </div>
+  );
+}
+
+function DisplayCompleteTodos() {
+  const { loading, error, data } = useQuery(GET_COMPLETED_TODOS);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
+  if (!data) return <p>No data</p>;
+
+  return (
     <table>
       <thead>
         <tr>
           <th>Id</th>
           <th>課題名</th>
-          <th>完了ボタン</th>
+          <th>状況</th>
         </tr>
       </thead>
       <tbody>
-        {data.incompleteTodos.map((e) =>
-          e?.id ? (
-            <tr key={e?.id}>
-              <td>{e?.id}</td>
-              <td>{e?.name}</td>
-              <td>
-                {e?.completed ? "completed" : <Complete todoId={e?.id} />}
-              </td>
-            </tr>
-          ) : (
-            <tr key={e?.id}>
-              <td>No data</td>
-              <td />
-              <td />
-            </tr>
-          )
-        )}
+        {data.completedTodos.map((e) => (
+          <tr key={e?.id}>
+            <td>{e?.id}</td>
+            <td>{e?.name}</td>
+            <td>完了済</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
 }
+
 export default App;
