@@ -3,8 +3,9 @@
 
 
 type Mutation {
-  complete(todoId: Int!): Todo
+  completeTodo(todoId: Int!): Todo
   createTodo(name: String!): Todo!
+  deleteTodo(todoId: Int!): Todo
 }
 
 type Query {

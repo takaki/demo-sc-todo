@@ -43,7 +43,7 @@ export const TodoMutation = extendType({
         return ctx.db.todo.create({ data: todo });
       },
     });
-    t.field("complete", {
+    t.field("completeTodo", {
       type: "Todo",
       args: {
         todoId: nonNull(intArg()),
@@ -52,6 +52,17 @@ export const TodoMutation = extendType({
         return ctx.db.todo.update({
           where: { id: args.todoId },
           data: { completed: true },
+        });
+      },
+    });
+    t.field("deleteTodo", {
+      type: "Todo",
+      args: {
+        todoId: nonNull(intArg()),
+      },
+      resolve(_root, args, ctx) {
+        return ctx.db.todo.delete({
+          where: { id: args.todoId },
         });
       },
     });
