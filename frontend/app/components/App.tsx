@@ -1,23 +1,23 @@
 "use client";
-import { ApolloProvider, gql, useQuery } from "@apollo/client";
+import { ApolloProvider, useQuery } from "@apollo/client";
 import { client } from "@/src";
+import { graphql } from "@/src/gql";
 
-const GET_LOCATIONS = gql`
-  query GetLocations {
-    locations {
+const GET_LOCATIONS = graphql(`
+  query Todos {
+    todos {
       id
       name
-      description
-      photo
+      completed
     }
   }
-`;
+`);
 
 function App() {
   return (
     <ApolloProvider client={client}>
       <div>
-        <h2>My first Apollo app 🚀</h2>
+        <h2>My first Apollo Todo app 🚀</h2>
         <DisplayLocations />
       </div>
     </ApolloProvider>
@@ -29,33 +29,26 @@ function DisplayLocations() {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
-
-  return data.locations.map(
-    ({
-      id,
-      name,
-      description,
-      photo,
-    }: {
-      id: number;
-      name: string;
-      description: string;
-      photo: string;
-    }) => (
-      <div key={id}>
-        <h3>{name}</h3>
-        <img
-          width="400"
-          height="250"
-          alt="location-reference"
-          src={`${photo}`}
-        />
-        <br />
-        <b>About this location:</b>
-        <p>{description}</p>
-        <br />
-      </div>
-    )
+  if (!data) return <p>No data</p>;
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Completed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.todos.map((e) => (
+          <tr key={e?.id}>
+            <td>{e?.id}</td>
+            <td>{e?.name}</td>
+            <td>{e?.completed ? "completed" : "not completed"}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 export default App;
