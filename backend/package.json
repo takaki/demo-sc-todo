@@ -1,0 +1,7 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "todo demo app backend",
+  "main": "index.js",
+  "license": "MIT"
+}
