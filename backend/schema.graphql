@@ -5,3 +5,9 @@
 type Query {
   ok: Boolean!
 }
+
+type Todo {
+  completed: Boolean
+  id: Int
+  name: String
+}
