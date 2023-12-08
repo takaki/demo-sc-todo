@@ -17,6 +17,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@local/eslint-config": "^0.0.1",
     "@graphql-codegen/cli": "5.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
