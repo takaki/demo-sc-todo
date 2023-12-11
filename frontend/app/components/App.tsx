@@ -54,7 +54,7 @@ function App() {
           type={'radio'}
           name={'completed'}
           value={'false'}
-          checked={!completed}
+          defaultChecked={!completed}
           onClick={() => setCompleted(false)}
         />
         <label>未完了</label>
@@ -62,7 +62,7 @@ function App() {
           type={'radio'}
           name={'completed'}
           value={'true'}
-          checked={completed}
+          defaultChecked={completed}
           onClick={() => setCompleted(true)}
         />
         <label>完了</label>
