@@ -3,6 +3,9 @@ import { ApolloProvider, useMutation, useQuery } from '@apollo/client'
 import { client } from '@/src'
 import { graphql } from '@/src/gql'
 import { useState } from 'react'
+import { Table } from 'antd'
+import { ColumnsType } from 'antd/es/table'
+import { Todo } from '@/src/gql/graphql'
 
 const GET_COMPLETED_TODOS = graphql(`
   query Todos {
@@ -123,34 +126,29 @@ function DisplayIncompleteTodos() {
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error : {error.message}</p>
   if (!data) return <p>No data</p>
+  const dataSource = data.incompleteTodos.map((e) => ({
+    id: e?.id,
+    name: e?.name,
+    completed: e?.completed,
+  }))
+  const columns: ColumnsType<Omit<Todo, '__typename'>> = [
+    {
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    { title: '課題名', dataIndex: 'name', key: 'name' },
+    {
+      title: '完了ボタン',
+      dataIndex: 'id',
+      key: 'completed',
+      render: (id) => <Complete todoId={id} />,
+    },
+  ]
+
   return (
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>課題名</th>
-            <th>完了ボタン</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.incompleteTodos.map((e) =>
-            e?.id ? (
-              <tr key={e?.id}>
-                <td>{e?.id}</td>
-                <td>{e?.name}</td>
-                <td>{e?.completed ? 'completed' : <Complete todoId={e?.id} />}</td>
-              </tr>
-            ) : (
-              <tr key={e?.id}>
-                <td>No data</td>
-                <td />
-                <td />
-              </tr>
-            ),
-          )}
-        </tbody>
-      </table>
+      <Table dataSource={dataSource} columns={columns} />
       <AddForm />
     </div>
   )
