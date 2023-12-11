@@ -56,8 +56,12 @@ export const TodoMutation = extendType({
       },
       resolve(_root, args, ctx) {
         return ctx.db.todo.update({
-          where: { id: args.todoId },
-          data: { completed: true },
+          where: {
+            id: args.todoId,
+          },
+          data: {
+            completed: true,
+          },
         })
       },
     })
@@ -68,7 +72,9 @@ export const TodoMutation = extendType({
       },
       resolve(_root, args, ctx) {
         return ctx.db.todo.delete({
-          where: { id: args.todoId },
+          where: {
+            id: args.todoId,
+          },
         })
       },
     })
