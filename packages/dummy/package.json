@@ -2,5 +2,9 @@
   "name": "@local/dummy",
   "version": "1.0.0",
   "main": "./index.ts",
-  "license": "MIT"
+  "license": "MIT",
+  "exports": ["./src/index.ts"],
+  "dependencies": {
+    "@local/typescript-config": "*"
+  }
 }
