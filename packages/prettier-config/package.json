@@ -2,8 +2,9 @@
   "name": "@local/prettier-config",
   "version": "0.0.1",
   "license": "MIT",
-  "files": ["base.js"],
+  "main": "index.js",
   "devDependencies": {
-    "prettier": "^3.1.0"
+    "prettier": "^3.1.1",
+    "prettier-plugin-tailwindcss": "^0.5.9"
   }
 }
