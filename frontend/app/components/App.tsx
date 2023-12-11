@@ -161,26 +161,26 @@ function DisplayCompleteTodos() {
   if (error) return <p>Error : {error.message}</p>
   if (!data) return <p>No data</p>
 
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>課題名</th>
-          <th>状況</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.completedTodos.map((e) => (
-          <tr key={e?.id}>
-            <td>{e?.id}</td>
-            <td>{e?.name}</td>
-            <td>完了済</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )
+  const dataSource = data.completedTodos.map((e) => ({
+    id: e?.id,
+    name: e?.name,
+    completed: '完了済',
+  }))
+  const columns: ColumnsType<Omit<Todo, '__typename' | 'completed'>> = [
+    {
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    { title: '課題名', dataIndex: 'name', key: 'name' },
+    {
+      title: '状況',
+      dataIndex: 'id',
+      key: 'completed',
+    },
+  ]
+
+  return <Table dataSource={dataSource} columns={columns} />
 }
 
 export default App
