@@ -3,7 +3,7 @@ import { ApolloProvider, useMutation, useQuery } from '@apollo/client'
 import { client } from '@/src'
 import { graphql } from '@/src/gql'
 import { useState } from 'react'
-import { Table } from 'antd'
+import { Button, Input, Radio, Table, Typography } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { Todo } from '@/src/gql/graphql'
 
@@ -51,26 +51,12 @@ function App() {
   const [completed, setCompleted] = useState(false)
   return (
     <ApolloProvider client={client}>
-      <div>
-        <h2>My first Apollo Todo app 🚀</h2>
-        <input
-          type={'radio'}
-          name={'completed'}
-          value={'false'}
-          defaultChecked={!completed}
-          onClick={() => setCompleted(false)}
-        />
-        <label>未完了</label>
-        <input
-          type={'radio'}
-          name={'completed'}
-          value={'true'}
-          defaultChecked={completed}
-          onClick={() => setCompleted(true)}
-        />
-        <label>完了</label>
-        {completed ? <DisplayCompleteTodos /> : <DisplayIncompleteTodos />}
-      </div>
+      <Typography.Title level={2}>My first Apollo Todo app 🚀</Typography.Title>
+      <Radio.Group name={'completed'} defaultValue={1} onChange={(e) => setCompleted(e.target.value !== 1)}>
+        <Radio value={1}>未完了</Radio>
+        <Radio value={2}>完了</Radio>
+      </Radio.Group>
+      {completed ? <DisplayCompleteTodos /> : <DisplayIncompleteTodos />}
     </ApolloProvider>
   )
 }
@@ -86,17 +72,20 @@ function AddForm() {
   if (error) return `Submission error! ${error.message}`
 
   return (
-    <form
-      onSubmit={async (e) => {
-        e.preventDefault()
-        await addTodo({ variables: { name: name } })
-        setName('')
-      }}
-    >
-      課題を追加
-      <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-      <button type="submit">Add Todo</button>
-    </form>
+    <div>
+      <Typography.Title level={3}>課題を追加</Typography.Title>
+      <Input type="text" value={name} style={{ width: '20%' }} onChange={(e) => setName(e.target.value)} />
+      <Button
+        type="default"
+        onClick={async (e) => {
+          e.preventDefault()
+          await addTodo({ variables: { name: name } })
+          setName('')
+        }}
+      >
+        Add Todo
+      </Button>
+    </div>
   )
 }
 
@@ -110,13 +99,13 @@ function Complete(v: { todoId: number }) {
   if (error) return `Submission error! ${error.message}`
 
   return (
-    <button
+    <Button
       onClick={async () => {
         await completeTodo({ variables: { todoId: v.todoId } })
       }}
     >
       完了!!
-    </button>
+    </Button>
   )
 }
 
@@ -164,7 +153,6 @@ function DisplayCompleteTodos() {
   const dataSource = data.completedTodos.map((e) => ({
     id: e?.id,
     name: e?.name,
-    completed: '完了済',
   }))
   const columns: ColumnsType<Omit<Todo, '__typename' | 'completed'>> = [
     {
@@ -175,8 +163,9 @@ function DisplayCompleteTodos() {
     { title: '課題名', dataIndex: 'name', key: 'name' },
     {
       title: '状況',
-      dataIndex: 'id',
+      dataIndex: 'completed',
       key: 'completed',
+      render: () => 'Done',
     },
   ]
 
