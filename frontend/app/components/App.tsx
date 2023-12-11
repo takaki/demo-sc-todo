@@ -1,11 +1,11 @@
-"use client";
-import { ApolloProvider, useMutation, useQuery } from "@apollo/client";
-import { client } from "@/src";
-import { graphql } from "@/src/gql";
-import { Button, Input, Radio, Table, Typography } from "antd";
-import { ColumnsType } from "antd/es/table";
-import { Todo } from "@/src/gql/graphql";
-import { atom, RecoilRoot, selector, useRecoilState, useRecoilValue } from "recoil";
+'use client'
+import { ApolloProvider, useMutation, useQuery } from '@apollo/client'
+import { client } from '@/src'
+import { graphql } from '@/src/gql'
+import { Button, Input, Radio, Table, Typography } from 'antd'
+import { ColumnsType } from 'antd/es/table'
+import { Todo } from '@/src/gql/graphql'
+import { atom, RecoilRoot, selector, useRecoilState, useRecoilValue } from 'recoil'
 
 const GET_COMPLETED_TODOS = graphql(`
   query Todos {
@@ -67,7 +67,7 @@ function AppImpl() {
   return (
     <ApolloProvider client={client}>
       <Typography.Title level={2}>My first Apollo Todo app 🚀</Typography.Title>
-      <Radio.Group name={"completed"} defaultValue={1} onChange={(e) => setCompleted(e.target.value !== 1)}>
+      <Radio.Group name={'completed'} defaultValue={1} onChange={(e) => setCompleted(e.target.value !== 1)}>
         <Radio value={1}>未完了</Radio>
         <Radio value={2}>完了</Radio>
       </Radio.Group>
@@ -102,7 +102,7 @@ function AddForm() {
   return (
     <div>
       <Typography.Title level={3}>課題を追加</Typography.Title>
-      <Input type="text" value={name} style={{ width: "20%" }} onChange={(e) => setName(e.target.value)} />
+      <Input type="text" value={name} style={{ width: '20%' }} onChange={(e) => setName(e.target.value)} />
       <Button
         type="default"
         onClick={async (e) => {
