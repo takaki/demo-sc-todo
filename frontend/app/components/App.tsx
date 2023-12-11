@@ -2,10 +2,10 @@
 import { ApolloProvider, useMutation, useQuery } from '@apollo/client'
 import { client } from '@/src'
 import { graphql } from '@/src/gql'
-import { useState } from 'react'
 import { Button, Input, Radio, Table, Typography } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { Todo } from '@/src/gql/graphql'
+import { atom, RecoilRoot, selector, useRecoilState, useRecoilValue } from 'recoil'
 
 const GET_COMPLETED_TODOS = graphql(`
   query Todos {
@@ -47,8 +47,23 @@ const COMPLETE_TODO = graphql(`
   }
 `)
 
+const completedState = atom({
+  key: 'completedState',
+  default: false,
+})
+
 function App() {
-  const [completed, setCompleted] = useState(false)
+  return (
+    <RecoilRoot>
+      <ApolloProvider client={client}>
+        <AppImpl />
+      </ApolloProvider>
+    </RecoilRoot>
+  )
+}
+
+function AppImpl() {
+  const [completed, setCompleted] = useRecoilState(completedState)
   return (
     <ApolloProvider client={client}>
       <Typography.Title level={2}>My first Apollo Todo app 🚀</Typography.Title>
@@ -61,8 +76,21 @@ function App() {
   )
 }
 
+const nameState = atom({
+  key: 'nameState',
+  default: '',
+})
+
+const nameLengthState = selector({
+  key: 'nameLengthState',
+  get: ({ get }) => {
+    return get(nameState).length
+  },
+})
+
 function AddForm() {
-  const [name, setName] = useState('')
+  const [name, setName] = useRecoilState(nameState)
+  const nameLength = useRecoilValue(nameLengthState)
   // noinspection JSUnusedLocalSymbols
   const [addTodo, { data, loading, error }] = useMutation(ADD_TODO, {
     refetchQueries: ['InCompleteTodos'],
@@ -83,7 +111,7 @@ function AddForm() {
           setName('')
         }}
       >
-        Add Todo
+        Add Todo (length = {nameLength})
       </Button>
     </div>
   )
