@@ -10,6 +10,7 @@
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
+    "@local/dummy": "^1.0.0",
     "@apollo/client": "^3.8.8",
     "antd": "^5.12.1",
     "graphql": "^16.8.1",
