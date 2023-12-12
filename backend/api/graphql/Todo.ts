@@ -1,43 +1,43 @@
-import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
+import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus'
 
 export const Todo = objectType({
-  name: "Todo",
+  name: 'Todo',
   definition(t) {
-    t.int("id");
-    t.string("name");
-    t.boolean("completed");
+    t.int('id')
+    t.string('name')
+    t.boolean('completed')
   },
-});
+})
 
 export const TodoQuery = extendType({
-  type: "Query",
+  type: 'Query',
   definition(t) {
-    t.nonNull.list.field("allTodos", {
-      type: "Todo",
+    t.nonNull.list.field('allTodos', {
+      type: 'Todo',
       resolve(_root, _args, ctx) {
-        return ctx.db.todo.findMany({});
+        return ctx.db.todo.findMany({})
       },
-    });
-    t.nonNull.list.field("incompleteTodos", {
-      type: "Todo",
+    })
+    t.nonNull.list.field('incompleteTodos', {
+      type: 'Todo',
       resolve(_root, _args, ctx) {
-        return ctx.db.todo.findMany({ where: { completed: false } });
+        return ctx.db.todo.findMany({ where: { completed: false } })
       },
-    });
-    t.nonNull.list.field("completedTodos", {
-      type: "Todo",
+    })
+    t.nonNull.list.field('completedTodos', {
+      type: 'Todo',
       resolve(_root, _args, ctx) {
-        return ctx.db.todo.findMany({ where: { completed: true } });
+        return ctx.db.todo.findMany({ where: { completed: true } })
       },
-    });
+    })
   },
-});
+})
 
 export const TodoMutation = extendType({
-  type: "Mutation",
+  type: 'Mutation',
   definition(t) {
-    t.nonNull.field("createTodo", {
-      type: "Todo",
+    t.nonNull.field('createTodo', {
+      type: 'Todo',
       args: {
         name: nonNull(stringArg()),
       },
@@ -45,12 +45,12 @@ export const TodoMutation = extendType({
         const todo = {
           name: args.name,
           completed: false,
-        };
-        return ctx.db.todo.create({ data: todo });
+        }
+        return ctx.db.todo.create({ data: todo })
       },
-    });
-    t.field("completeTodo", {
-      type: "Todo",
+    })
+    t.field('completeTodo', {
+      type: 'Todo',
       args: {
         todoId: nonNull(intArg()),
       },
@@ -58,19 +58,19 @@ export const TodoMutation = extendType({
         return ctx.db.todo.update({
           where: { id: args.todoId },
           data: { completed: true },
-        });
+        })
       },
-    });
-    t.field("deleteTodo", {
-      type: "Todo",
+    })
+    t.field('deleteTodo', {
+      type: 'Todo',
       args: {
         todoId: nonNull(intArg()),
       },
       resolve(_root, args, ctx) {
         return ctx.db.todo.delete({
           where: { id: args.todoId },
-        });
+        })
       },
-    });
+    })
   },
-});
+})
