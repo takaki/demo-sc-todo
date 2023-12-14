@@ -1,0 +1,40 @@
+{
+  "name": "demo-sc-todo",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "git@github.com:takaki/demo-sc-todo.git",
+  "author": "TANIGUCHI Takaki <takaki@asis.media-as.org>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^6.13.2",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.1.1",
+    "prettier-plugin-tailwindcss": "^0.5.9",
+    "turbo": "latest"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "yarn@1.22.19",
+  "workspaces": [
+    "frontend",
+    "backend",
+    "packages/*"
+  ],
+  "prettier": {
+    "plugins": ["prettier-plugin-tailwindcss"],
+    "singleQuote": true,
+    "semi": false,
+    "trailingComma": "all",
+    "printWidth": 120
+  }
+}
